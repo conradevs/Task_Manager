@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
 import jwt from "jsonwebtoken";
 
-const generateJWT = () => {
-    return jwt.sign({name: 'Juan'},process.env.JWT_SECRET, {
+const generateJWT = (id) => {
+    return jwt.sign({ id },process.env.JWT_SECRET, {
         expiresIn: "30h",
     });
 };
