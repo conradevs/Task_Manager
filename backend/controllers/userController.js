@@ -115,7 +115,8 @@ const newPassword = async (req, res) => {
 };
 
 const profile = async (req,res) => {
-    console.log("from profile")
+    const {user} = req
+    res.json(user)
 }
 
 export { registration,
