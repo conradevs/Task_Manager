@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const proySchema = mongoose.Schema({
+const projSchema = mongoose.Schema({
     name: {
         type: String,
         trim: true,
@@ -17,11 +17,11 @@ const proySchema = mongoose.Schema({
         default: Date.now()
     },
     client:{
-        type: Date,
+        type: String,
         trim: true,
         default: Date.now()
     },
-    owner:{
+    creator:{
         type: mongoose.Schema.Types.ObjectId,
         ref:"User",
     },
@@ -35,5 +35,5 @@ const proySchema = mongoose.Schema({
     timestamps: true
 });
 
-const Proyect = mongoose.model('Proyect',proySchema);
-export default Proyect;
+const Project = mongoose.model('Project',projSchema);
+export default Project;

@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import conectarDB from "./config/db.js"
 
 import userRoutes from "./routes/userRoutes.js"
+import proyRoutes from "./routes/proyRoutes.js"
 import checkAuth from './middleware/checkAuth.js';
 
 const app = express();
@@ -13,8 +14,8 @@ conectarDB();
 
 // Routing
 
-app.use('/api/users',userRoutes);
-app.use("/api/projects",  userRoutes)
+app.use('/api/users', userRoutes);
+app.use("/api/projects",proyRoutes)
 
 const PORT = process.env.PORT || 4000;
 

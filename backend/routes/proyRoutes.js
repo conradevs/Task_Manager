@@ -1,10 +1,10 @@
-import Express from 'express'
+import express from 'express'
 import {
-    getProyects,
-    newProyect,
-    getProyect,
-    editProyect,
-    deleteProyect,
+    getProjects,
+    newProject,
+    getProject,
+    editProject,
+    deleteProject,
     addCollaborator,
     deleteCollaborator,
     getTasks 
@@ -16,14 +16,15 @@ const router = express.Router();
 
 router
     .route("/")
-    .get(checkAuth, getProyects)
-    .post(checkAuth, newProyect);
+    .get(checkAuth, getProjects)
+    .post(checkAuth, newProject);
 
 router
     .route('/:id')
-    .get(checkAuth, getProyect)
-    .put(checkAuth, editProyect)
-    .put(editProyect, deleteProyect);
+    .get(checkAuth, getProject)
+    .put(checkAuth, editProject)
+    .delete(checkAuth, deleteProject);
+
 
 router.get('/tasks/:id', checkAuth, getTasks)
 router.post('/add-collaborator/:id',checkAuth,addCollaborator)
