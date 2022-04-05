@@ -35,8 +35,7 @@ const getProject = async (req, res) => {
     // Get project tasks
     // Must be project creator or collaborator
     const tasks = await Task.find().where("project").equals(project._id);
-    const response = {...project,...tasks};
-    res.json(response);
+    res.json({project,tasks});
     //res.json(project)
 };
 
@@ -92,19 +91,6 @@ const addCollaborator  = async (req, res) => {};
 
 const deleteCollaborator  = async (req, res) => {};
 
-const getTasks  = async (req, res) => {
-    const {id} = req.params;
-
-    const project = await Project.findById(id);
-
-    if(!project) {
-        const error = new Error("Not Found")
-        return res.status(404).json({msg: error.message})
-    }
-    // Must be project creator or collaborator
-    const tasks = await Task.find().where("project").equals(id);
-    res.json(tasks);
-};
 
 export {
     getProjects,
@@ -113,6 +99,5 @@ export {
     editProject,
     deleteProject,
     addCollaborator,
-    deleteCollaborator,
-    getTasks   
+    deleteCollaborator  
 }
