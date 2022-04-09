@@ -1,11 +1,27 @@
+import {useState} from 'react'
 import {Link} from 'react-router-dom'
 const Register = () => {
+
+    const [user, setUser] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [repeatPassword, setRepeatPassword] = useState('');
+
+    const handleSubmit = e => {
+        e.preventDefault();
+        if([user,email,password,repeatPassword].includes()) {
+            console.log('All items are required')
+        }
+    }
     return ( 
         <>
             <h1 className="text-sky-600 font-black text-6xl">Create Account and administrate your
                 <span className="text-slate-700"> Projects</span>
             </h1>
-            <form className="my-10 bg-white shadow rounded-lg px-10 py-5 space-y-3">
+            <form 
+                className="my-10 bg-white shadow rounded-lg px-10 py-5 space-y-3"
+                onSubmit = {handleSubmit}
+            >
                 <div>
                     <label 
                         className="uppercase text-gray-600 block text-xl font-bold"
@@ -16,6 +32,8 @@ const Register = () => {
                         type="text"
                         placeholder="Your user name"
                         className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+                        value={user}
+                        onChange={e => setUser(e.target.value)}
                     />
                 </div>
                 <div>
@@ -28,6 +46,8 @@ const Register = () => {
                         type="email"
                         placeholder="register email"
                         className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
                     />
                 </div>
                 <div>
@@ -40,6 +60,8 @@ const Register = () => {
                         type="password"
                         placeholder="Password"
                         className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
                     />
                 </div>
                 <div>
@@ -52,6 +74,8 @@ const Register = () => {
                         type="password"
                         placeholder="Repeat your password"
                         className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+                        value={repeatPassword}
+                        onChange={e => setRepeatPassword(e.target.value)}
                     />
                 </div>
                 <input
