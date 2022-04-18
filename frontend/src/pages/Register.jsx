@@ -1,23 +1,31 @@
 import {useState} from 'react'
 import {Link} from 'react-router-dom'
+import Alert from '../components/Alert'
 const Register = () => {
 
     const [user, setUser] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
-
+    const [alert, setAlert] = useState('')
+    
     const handleSubmit = e => {
         e.preventDefault();
         if([user,email,password,repeatPassword].includes()) {
-            console.log('All items are required')
+            setAlert({
+                msg: 'All fields are required',
+                error: true 
+            })
+            return 
         }
     }
+    const {msg} = alert
     return ( 
         <>
             <h1 className="text-sky-600 font-black text-6xl">Create Account and administrate your
                 <span className="text-slate-700"> Projects</span>
             </h1>
+            {msg && <Alert alert={alert}/>}
             <form 
                 className="my-10 bg-white shadow rounded-lg px-10 py-5 space-y-3"
                 onSubmit = {handleSubmit}
