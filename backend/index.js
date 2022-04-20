@@ -1,9 +1,10 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import conectarDB from "./config/db.js"
-import userRoutes from "./routes/userRoutes.js"
-import proyRoutes from "./routes/proyRoutes.js"
-import taskRoutes from "./routes/taskRoutes.js"
+import cors from 'cors';
+import conectarDB from "./config/db.js";
+import userRoutes from "./routes/userRoutes.js";
+import proyRoutes from "./routes/proyRoutes.js";
+import taskRoutes from "./routes/taskRoutes.js";
 
 const app = express();
 app.use(express.json())
@@ -11,6 +12,20 @@ app.use(express.json())
 dotenv.config();
 conectarDB();
 
+// Config cors
+const whitelist = [process.env.FRONTEND_URL];
+const corsOptions = {
+    origin: function(origin,callback) {
+        if(whitelist.includes(origin)) {
+            // Can consult API
+            callback(null, true);
+        } else{
+            // Not autorization
+            callback(new Error("CORS Error"));
+        }
+    },
+};
+app.use(cors(corsOptions));
 // Routing
 
 app.use('/api/users', userRoutes);

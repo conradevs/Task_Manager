@@ -2,9 +2,10 @@ import {useState} from 'react'
 import {Link} from 'react-router-dom'
 import Alert from '../components/Alert'
 import axios from 'axios'
+
 const Register = () => {
 
-    const [user, setUser] = useState('');
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
@@ -12,7 +13,7 @@ const Register = () => {
     
     const handleSubmit = async e => {
         e.preventDefault();
-        if([user,email,password,repeatPassword].includes('')) {
+        if([name,email,password,repeatPassword].includes('')) {
             setAlert({
                 msg: 'All fields are required',
                 error: true 
@@ -37,10 +38,21 @@ const Register = () => {
 
         // Creating user into API
         try {
-             const response = await axios.post('http://localhost:4000/api/users',{user,email,password})
-             console.log(response)
+             const {data} = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/users`,{name,email,password})
+             setAlert({
+                 msg: data.msg,
+                 error: false
+             })
+             setName('')
+             setEmail('')
+             setPassword('')
+             setRepeatPassword('')
+
         } catch (error) {
-            console.log(error)
+            setAlert({
+                msg: error.response.data.msg,
+                error: true
+            })
         }
     }
     const {msg} = alert
@@ -64,8 +76,8 @@ const Register = () => {
                         type="text"
                         placeholder="Your user name"
                         className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
-                        value={user}
-                        onChange={e => setUser(e.target.value)}
+                        value={name}
+                        onChange={e => setName(e.target.value)}
                     />
                 </div>
                 <div>
@@ -94,6 +106,7 @@ const Register = () => {
                         className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
                         value={password}
                         onChange={e => setPassword(e.target.value)}
+                        autoComplete="on"
                     />
                 </div>
                 <div>
@@ -105,6 +118,7 @@ const Register = () => {
                         id="password2"
                         type="password"
                         placeholder="Repeat your password"
+                        autoComplete="on"
                         className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
                         value={repeatPassword}
                         onChange={e => setRepeatPassword(e.target.value)}
