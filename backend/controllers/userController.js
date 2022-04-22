@@ -15,6 +15,12 @@ const registration = async (req, res) => {
         const user = new User(req.body);
         user.token = generateId();
         await user.save();
+        // Send confirmation mail
+        emailRegister({
+            email: user.email,
+            name: user.name,
+            token: user.token
+        })
         res.json({msg: "User created successfully, check your email to confirm your account"});
     } catch (error) {
         console.log(error);
@@ -61,7 +67,6 @@ const confirmation = async (req, res) => {
         userConfirmation.token = "";
         await userConfirmation.save();
         res.json({msg: "User Account confirmated successfully"});
-        console.log(userConfirmation);
     } catch (error) {
         console.log(error);
     }
