@@ -113,7 +113,8 @@ const newPassword = async (req, res) => {
     const user = await User.findOne({token});
     if (user) {
         user.password = password;
-        user.token = ''
+        user.token = '';
+        user.conf = true
         try{
             await user.save()
             res.json({msg: "New password was saved successfully"});
