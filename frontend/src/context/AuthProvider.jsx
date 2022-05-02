@@ -25,7 +25,6 @@ const AuthProvider = ({children}) => {
             try{
                 const {data} = await axiosclient('/users/profile',config)
                 setAuth(data) 
-                navigate('/projects')
             } catch(error) {
                 setAuth({})
             } finally {

@@ -32,10 +32,7 @@ const getProject = async (req, res) => {
         const error = new Error("Access denied")
         return res.status(401).json({msg: error.message});
     }
-    // Get project tasks
-    // Must be project creator or collaborator
-    const tasks = await Task.find().where("project").equals(project._id);
-    res.json({project,tasks});
+    res.json(project);
     //res.json(project)
 };
 
