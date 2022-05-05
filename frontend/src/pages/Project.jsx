@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect,useState } from 'react';
 import { useParams, Link } from "react-router-dom"
 import useProjects from "../hooks/useProjects";
 import ModalFormTask from '../components/ModalFormTask'
@@ -6,8 +6,10 @@ import ModalFormTask from '../components/ModalFormTask'
 const Project = () => {
   const params=useParams();
   
-  const {project,getProject, loading} = useProjects();
+  const {project,getProject, loading,handleModalTask} = useProjects();
   
+  const [modal, setModal] = useState(false);
+
   useEffect(() => {
       getProject(params.id)
   },[])
@@ -33,6 +35,7 @@ const Project = () => {
 
       </div>
       <button
+        onClick={handleModalTask}
         type='button'
         className='text-sm px-5 py-3 w-full md:w-auto rounded-lg uppercase font-bold bg-sky-400 text-white text-center mt-5 flex gap-2 items-center justify-center' 
       >
@@ -40,7 +43,10 @@ const Project = () => {
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
         New task</button>
-        <ModalFormTask/>
+        <ModalFormTask
+          modal={modal}
+          setModal={setModal}
+        />
     </>
   )
 }

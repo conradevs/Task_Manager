@@ -11,6 +11,7 @@ const ProjectsProvider = ({children}) => {
     const [alert, setAlert] = useState({});
     const [project, setProject] = useState({});
     const [loading, setLoading] = useState(false);
+    const [modalFormTask, setModalFormTask] = useState(false)
     
     const navigate = useNavigate();
 
@@ -161,6 +162,14 @@ const ProjectsProvider = ({children}) => {
         }
     }
 
+    const handleModalTask = () => {
+        setModalFormTask(!modalFormTask)
+    }
+
+    const submitTask = async task => {
+        console.log(task)
+    }
+
     return(
         <ProjectsContext.Provider
             value={{
@@ -168,10 +177,13 @@ const ProjectsProvider = ({children}) => {
                 alert,
                 project,
                 loading,
+                modalFormTask,
                 showAlert,
                 submitProject,
                 getProject,
-                deleteProject
+                deleteProject,
+                handleModalTask,
+                submitTask
             }}>{children}
 
         </ProjectsContext.Provider>
