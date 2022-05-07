@@ -8,6 +8,7 @@ const ModalFormTask = () => {
 
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
+    const [deadline, setDeadline] = useState('')
     const [priority, setPriority] = useState('')
     
     const {modalFormTask,handleModalTask,alert,showAlert,submitTask} = useProjects();
@@ -115,6 +116,21 @@ const ModalFormTask = () => {
                                                 className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md'
                                                 value={description}
                                                 onChange={e => setDescription(e.target.value)}
+                                            />
+                                        </div>
+                                        <div className='mb-5'>
+                                            <label
+                                                className='text-gray-700 uppercase font-bold text-sm'
+                                                htmlFor='deadline'
+                                            >
+                                                Deadline
+                                            </label>
+                                            <input
+                                                type='date'
+                                                id="deadline"
+                                                className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md'
+                                                value={name}
+                                                onChange={e => setName(e.target.value)}
                                             />
                                         </div>
                                         <div className='mb-5'>
