@@ -2,6 +2,7 @@ import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import useProjects from '../hooks/useProjects'
 import Alert from './Alert'
+import { useParams } from 'react-router-dom'
 
 const PRIORITY = ['Low','Midium','High']
 const ModalFormTask = () => {
@@ -11,19 +12,21 @@ const ModalFormTask = () => {
     const [deadline, setDeadline] = useState('')
     const [priority, setPriority] = useState('')
     
+    const params = useParams();
+
     const {modalFormTask,handleModalTask,alert,showAlert,submitTask} = useProjects();
 
     const handleSubmit = e => {
         e.preventDefault();
         
-        if([name,description,priority].includes('')){
+        if([name,description,deadline,priority].includes('')){
             showAlert({
                 msg:'All fields are required',
                 error: true
             })
             return
         }
-        submitTask({name,description,priority})
+        submitTask({name,description,deadline,priority, project: params.id})
     }
 
     const {msg} = alert
@@ -129,8 +132,8 @@ const ModalFormTask = () => {
                                                 type='date'
                                                 id="deadline"
                                                 className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md'
-                                                value={name}
-                                                onChange={e => setName(e.target.value)}
+                                                value={deadline}
+                                                onChange={e => setDeadline(e.target.value)}
                                             />
                                         </div>
                                         <div className='mb-5'>
