@@ -4,7 +4,7 @@ const addTask = async (req,res) => {
     const {project} = req.body;
     const isProject = await Project.findById(project);
     const {id} = req.params;
-    console.log(id);
+
     if(!isProject) {
         const error = new Error("Not Found")
         return res.status(404).json({msg: error.message})

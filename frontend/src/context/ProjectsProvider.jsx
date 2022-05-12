@@ -127,6 +127,7 @@ const ProjectsProvider = ({children}) => {
             setProject(data)
         } catch (error) {
             console.log(error)
+
         } finally {
             setLoading(false)
         }
@@ -179,7 +180,13 @@ const ProjectsProvider = ({children}) => {
             }
 
             const {data} = await axiosclient.post('/tasks',task,config)
-            console.log(data)
+
+            // Add task to state
+            const updatedProject = {...project}
+            updatedProject.tasks = [...project.tasks, data]
+            setProject(updatedProject)
+            setAlert({})
+            setModalFormTask(false)            
         } catch (error) {
             console.log(error)
         }

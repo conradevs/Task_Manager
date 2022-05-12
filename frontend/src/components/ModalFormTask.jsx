@@ -16,7 +16,7 @@ const ModalFormTask = () => {
 
     const {modalFormTask,handleModalTask,alert,showAlert,submitTask} = useProjects();
 
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
         e.preventDefault();
         
         if([name,description,deadline,priority].includes('')){
@@ -26,7 +26,11 @@ const ModalFormTask = () => {
             })
             return
         }
-        submitTask({name,description,deadline,priority, project: params.id})
+        await submitTask({name,description,deadline,priority, project: params.id})
+        setName('')
+        setDescription('')
+        setDeadline('')
+        setPriority('')
     }
 
     const {msg} = alert

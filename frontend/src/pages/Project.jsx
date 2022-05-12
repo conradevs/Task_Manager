@@ -2,6 +2,7 @@ import { useEffect,useState } from 'react';
 import { useParams, Link } from "react-router-dom"
 import useProjects from "../hooks/useProjects";
 import ModalFormTask from '../components/ModalFormTask'
+import Task from '../components/Task'
 
 const Project = () => {
   const params=useParams();
@@ -43,6 +44,17 @@ const Project = () => {
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
         New task</button>
+        <p className='font-bold text-xl mt-10'>Project Tasks</p>
+        <div className='bg-white shadow mt-10 rounded-lg'>
+          {project.tasks?.length ?
+            project.tasks?.map(task => (
+              <Task
+                key={task._id}
+                task={task}
+              />
+            )) :
+            <p className='text-center my-5 p-10'>There are not tasks in this project</p>}
+        </div>
         <ModalFormTask
           modal={modal}
           setModal={setModal}
