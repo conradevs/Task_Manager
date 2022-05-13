@@ -11,7 +11,9 @@ const ProjectsProvider = ({children}) => {
     const [alert, setAlert] = useState({});
     const [project, setProject] = useState({});
     const [loading, setLoading] = useState(false);
-    const [modalFormTask, setModalFormTask] = useState(false)
+    const [modalFormTask, setModalFormTask] = useState(false);
+    const [task, setTask] = useState({});
+    const [modalDeleteTask,setModalDeleteTask] = useState(false)
     
     const navigate = useNavigate();
 
@@ -164,10 +166,43 @@ const ProjectsProvider = ({children}) => {
     }
 
     const handleModalTask = () => {
-        setModalFormTask(!modalFormTask)
+        setModalFormTask(!modalFormTask);
+        setTask('');
     }
 
     const submitTask = async task => {
+
+        if(task?.id) {
+            await editTask(task)
+        }
+        else{
+            await createTask(task)
+        }
+    }
+
+    const editTask = async task => {
+        try{
+            const token = localStorage.getItem('token')
+            if(!token) return
+
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            }
+
+            const {data} = await axiosclient.put(`/tasks/${task.id}`,task,config)
+            const updatedProject = {...project}
+            updatedProject.tasks = updatedProject.tasks.map(taskState => taskState._id === data._id? data : taskState)
+            setProject(updatedProject)
+            setAlert({})
+            setModalFormTask(false);
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const createTask = async task => {
         try{
             const token = localStorage.getItem('token')
             if(!token) return
@@ -192,6 +227,16 @@ const ProjectsProvider = ({children}) => {
         }
     }
 
+    const handleModalEditTask = task => {
+        setTask(task);
+        setModalFormTask(true);
+    }
+
+    const handleModalDeleteTask = task => {
+        setTask(task)
+        setModalDeleteTask(true)
+    }
+
     return(
         <ProjectsContext.Provider
             value={{
@@ -200,12 +245,16 @@ const ProjectsProvider = ({children}) => {
                 project,
                 loading,
                 modalFormTask,
+                modalDeleteTask,
+                task,
                 showAlert,
                 submitProject,
                 getProject,
                 deleteProject,
                 handleModalTask,
-                submitTask
+                submitTask,
+                handleModalEditTask,
+                handleModalDeleteTask
             }}>{children}
 
         </ProjectsContext.Provider>

@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom'
 const PRIORITY = ['Low','Midium','High']
 const ModalFormTask = () => {
 
+    const [id, setId] = useState('')
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [deadline, setDeadline] = useState('')
@@ -14,7 +15,23 @@ const ModalFormTask = () => {
     
     const params = useParams();
 
-    const {modalFormTask,handleModalTask,alert,showAlert,submitTask} = useProjects();
+    const {modalFormTask,handleModalTask,alert,showAlert,submitTask,task} = useProjects();
+
+    useEffect(() => {
+        if(task?._id){
+            setId(task._id)
+            setName(task.name);
+            setDescription(task.description);
+            setDeadline(task.deadLine?.split('T')[0]);
+            setPriority(task.priority);
+            return
+        }
+        setId('')
+        setName('')
+        setDescription('')
+        setDeadline('')
+        setPriority('')
+    },[task]);
 
     const handleSubmit = async e => {
         e.preventDefault();
@@ -26,7 +43,8 @@ const ModalFormTask = () => {
             })
             return
         }
-        await submitTask({name,description,deadline,priority, project: params.id})
+        await submitTask({id,name,description,deadline,priority, project: params.id})
+        setId('')
         setName('')
         setDescription('')
         setDeadline('')
@@ -87,7 +105,7 @@ const ModalFormTask = () => {
                             <div className="sm:flex sm:items-start">
                                 <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
                                     <Dialog.Title as="h3" className="text-lg leading-6 font-bold text-gray-900">
-                                        Create Task            
+                                        {id? 'Edit Task' : 'Create Task'}             
                                     </Dialog.Title>
                                     {msg && <Alert alert={alert}/>}
                                     <form 
@@ -162,7 +180,7 @@ const ModalFormTask = () => {
                                         <input
                                             type='submit'
                                             className='bg-sky-600 hover:bg-sky-700 w-full p-3 text-white uppercase font-bold cursor-pointer transition-colours rounded'
-                                            value="Create Task"
+                                            value={id? 'Save Changes' : 'Create Task'}  
                                         />
                                     </form>
                                 </div>

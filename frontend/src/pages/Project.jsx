@@ -1,15 +1,14 @@
-import { useEffect,useState } from 'react';
+import { useEffect } from 'react';
 import { useParams, Link } from "react-router-dom"
 import useProjects from "../hooks/useProjects";
 import ModalFormTask from '../components/ModalFormTask'
+import ModalDeleteTask from '../components/ModalDeleteTask'
 import Task from '../components/Task'
 
 const Project = () => {
   const params=useParams();
   
   const {project,getProject, loading,handleModalTask} = useProjects();
-  
-  const [modal, setModal] = useState(false);
 
   useEffect(() => {
       getProject(params.id)
@@ -55,10 +54,8 @@ const Project = () => {
             )) :
             <p className='text-center my-5 p-10'>There are not tasks in this project</p>}
         </div>
-        <ModalFormTask
-          modal={modal}
-          setModal={setModal}
-        />
+        <ModalFormTask/>
+        <ModalDeleteTask/>
     </>
   )
 }
