@@ -4,11 +4,12 @@ import useProjects from "../hooks/useProjects";
 import ModalFormTask from '../components/ModalFormTask'
 import ModalDeleteTask from '../components/ModalDeleteTask'
 import Task from '../components/Task'
+import Alert from '../components/Alert';
 
 const Project = () => {
   const params=useParams();
   
-  const {project,getProject, loading,handleModalTask} = useProjects();
+  const {project,getProject, loading,handleModalTask,alert} = useProjects();
 
   useEffect(() => {
       getProject(params.id)
@@ -16,6 +17,7 @@ const Project = () => {
   
   const {name} = project
   if (loading) return 'loading...'
+  const {msg} = alert
   return (  
     <>
       <div className='flex justify-between'>
@@ -44,6 +46,11 @@ const Project = () => {
         </svg>
         New task</button>
         <p className='font-bold text-xl mt-10'>Project Tasks</p>
+        <div className='flex justify-center'>
+          <div className='w-full md:w-1/3 lg:w-1/4'>
+            {msg && <Alert alert={alert} />}
+          </div>
+        </div>
         <div className='bg-white shadow mt-10 rounded-lg'>
           {project.tasks?.length ?
             project.tasks?.map(task => (
