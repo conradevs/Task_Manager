@@ -14,7 +14,7 @@ const ProjectsProvider = ({children}) => {
     const [modalFormTask, setModalFormTask] = useState(false);
     const [task, setTask] = useState({});
     const [modalDeleteTask,setModalDeleteTask] = useState(false)
-    
+    const [collaborator, setCollaborator] = useState({})
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -264,6 +264,36 @@ const ProjectsProvider = ({children}) => {
         }
     }
 
+    const submitCollaborator = async email => {
+        try {
+            const token = localStorage.getItem('token')
+            if(!token) return
+
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        const {data} = await axiosclient.post('/projects/collaborators',{email},config);
+        setCollaborator(data)
+        setLoading(true)
+        setAlert({})
+        } catch(error) {
+            setAlert({
+                msg: error.response.data.msg,
+                error: true
+            })
+            setTimeout(() => {setAlert({})},2000)
+        } finally {
+            setLoading(false)
+        }
+    } 
+
+    const addCollaborator = async email => {
+        console.log(email)
+    }
+
     return(
         <ProjectsContext.Provider
             value={{
@@ -274,6 +304,7 @@ const ProjectsProvider = ({children}) => {
                 modalFormTask,
                 modalDeleteTask,
                 task,
+                collaborator,
                 showAlert,
                 submitProject,
                 getProject,
@@ -282,7 +313,9 @@ const ProjectsProvider = ({children}) => {
                 submitTask,
                 handleModalEditTask,
                 handleModalDeleteTask,
-                deleteTask
+                deleteTask,
+                submitCollaborator,
+                addCollaborator
             }}>{children}
 
         </ProjectsContext.Provider>

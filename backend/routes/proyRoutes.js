@@ -5,6 +5,7 @@ import {
     getProject,
     editProject,
     deleteProject,
+    findCollaborator,
     addCollaborator,
     deleteCollaborator
 } from '../controllers/proyController.js'
@@ -24,8 +25,8 @@ router
     .put(checkAuth, editProject)
     .delete(checkAuth, deleteProject);
 
-
-router.post('/add-collaborator/:id',checkAuth,addCollaborator)
-router.post('/delete-collaborator/:id',checkAuth,deleteCollaborator)
+router.post('/collaborators',checkAuth,findCollaborator)
+router.post('/collaborators/:id',checkAuth,addCollaborator)
+router.delete('/collaborators/:id',checkAuth,deleteCollaborator)
 
 export default router;
