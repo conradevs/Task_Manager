@@ -94,7 +94,22 @@ const findCollaborator  = async (req, res) => {
     res.json(user);
 };
 
-const addCollaborator  = async (req, res) => {};
+const addCollaborator  = async (req, res) => {
+    const project = await Project.findById(req.params.id);
+
+    if(!project) {
+        const error = new Error("Project not found");
+        return res.status(404).json({msg: error.message});
+    }
+
+    if (project.creator.toString() !== req.user._id.toString()) {
+        const error = new Error("Invalid Action...");
+        return res.status(404).json({msg: error.message});
+    }
+
+    console.log(req.body)
+    
+};
 
 const deleteCollaborator  = async (req, res) => {};
 
