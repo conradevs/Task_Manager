@@ -259,6 +259,7 @@ const ProjectsProvider = ({children}) => {
             const updatedProject = {...project}
             updatedProject.tasks = updatedProject.tasks.filter(taskState => taskState._id !== task._id)
             setProject(updatedProject)
+            const {proj_updated} = await axiosclient.put(`/projects/${project._id}`,updatedProject,config);
             setModalDeleteTask(false);
             setTask({})
             setTimeout(() => {setAlert({})},1000)      

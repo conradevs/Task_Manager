@@ -54,6 +54,8 @@ const editProject = async (req, res) => {
     project.description = req.body.description || project.description;
     project.deadLine = req.body.deadLine || project.deadLine;
     project.client = req.body.client || project.client;
+    project.tasks = req.body.tasks || project.tasks;
+    project.collaborators = req.body.collaborators || project.collaborators;
 
     try {
         const storedProject = await project.save();
