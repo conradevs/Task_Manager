@@ -11,6 +11,8 @@ const NewCollaborator = () => {
         getProject(params.id)
     },[]);
 
+    if(!project._id) return <Alert alert={alert}/>
+
     return (
         <>
             <h1 className='text-4xl font-black'>Add Collaborator to {project.name}</h1>

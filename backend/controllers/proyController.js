@@ -109,7 +109,11 @@ const addCollaborator  = async (req, res) => {
         return res.status(404).json({msg: error.message});
     }
 
-    console.log(req.body)
+    // Collaborator can't be project admin
+    if(project.creator.toString() === req.user._id.toString()) {
+        const error = new Error("Project admin already included")
+        return res.status(404).json({msg: error.message});
+    }
     
 };
 

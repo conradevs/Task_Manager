@@ -305,7 +305,7 @@ const ProjectsProvider = ({children}) => {
                     Authorization: `Bearer ${token}`
                 }
             }
-            const {data} = await axiosclient.post('/projects/collaborators',{email},config);
+            const {data} = await axiosclient.post(`/projects/collaborators/${project._id}`,email,config);
             console.log(data)
         } catch(error){
 
