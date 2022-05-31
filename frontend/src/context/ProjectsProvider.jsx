@@ -306,9 +306,19 @@ const ProjectsProvider = ({children}) => {
                 }
             }
             const {data} = await axiosclient.post(`/projects/collaborators/${project._id}`,email,config);
-            console.log(data)
+            
+            setAlert({
+                msg: data.msg,
+                error: false
+            })
+            setCollaborator({})
+            setAlert({})
         } catch(error){
-
+            console.log(error.response.data.msg)
+            setAlert({
+                msg: error.response.data.msg,
+                error: true
+            })
         }
     }
 

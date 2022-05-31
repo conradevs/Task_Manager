@@ -109,11 +109,27 @@ const addCollaborator  = async (req, res) => {
         return res.status(404).json({msg: error.message});
     }
 
-    // Collaborator can't be project admin
-    if(project.creator.toString() === req.user._id.toString()) {
-        const error = new Error("Project admin already included")
+    const {email} = req.body;
+    const user = await User.findOne({email}).select('-conf -createdAt -updatedAt -password -token -__v')
+    if(!user) {
+        const error = new Error('User not found')
         return res.status(404).json({msg: error.message});
     }
+
+    // Collaborator can't be project admin
+    if(project.creator.toString() === user._id.toString()) {
+        const error = new Error("Project admin already included in this project")
+        return res.status(404).json({msg: error.message});
+    }
+    // check if collaborator is already included in project
+    if(project.collaborators.includes(user._id)){
+        const error = new Error("Collaborator already included in this project")
+        return res.status(403).json({msg: error.message});
+    }
+    // Add collaborator to project
+    project.collaborators.push(user._id);
+    await project.save();
+    res.json({msg: 'Collaborator included succesfully'})
     
 };
 
