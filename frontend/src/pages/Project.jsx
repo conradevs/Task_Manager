@@ -6,8 +6,6 @@ import ModalDeleteTask from '../components/ModalDeleteTask'
 import Task from '../components/Task'
 import Alert from '../components/Alert';
 
-import Collaborator from '../components/Collaborator';
-
 const Project = () => {
   const params=useParams();
   
@@ -69,14 +67,6 @@ const Project = () => {
             to={`/projects/new-collaborator/${project._id}`}
             className='text-gray-400 hover:text-black uppercase font-bold'
           >Add New</Link>
-        </div>
-
-        <div className='bg-white shadow mt-10 rounded-lg'>
-          {project.collaborators?.length ?
-            project.collaborators?.map(task => (
-               <Collaborator/>
-            )) :
-            <p className='text-center my-5 p-10'>There are not tasks in this project</p>}
         </div>
         <ModalFormTask/>
         <ModalDeleteTask/>
