@@ -3,7 +3,6 @@ import { useParams, Link } from "react-router-dom"
 import useProjects from "../hooks/useProjects";
 import ModalFormTask from '../components/ModalFormTask'
 import ModalDeleteTask from '../components/ModalDeleteTask'
-import ModalDeleteCollaborator from '../components/ModalDeleteCollaborator'
 import Task from '../components/Task'
 import Alert from '../components/Alert';
 
@@ -74,17 +73,13 @@ const Project = () => {
 
         <div className='bg-white shadow mt-10 rounded-lg'>
           {project.collaborators?.length ?
-            project.collaborators?.map(collaborator => (
-               <Collaborator
-                key={collaborator._id}
-                collaborator={collaborator}
-               />
+            project.collaborators?.map(task => (
+               <Collaborator/>
             )) :
-            <p className='text-center my-5 p-10'>There are no collaborators in this project</p>}
+            <p className='text-center my-5 p-10'>There are not tasks in this project</p>}
         </div>
         <ModalFormTask/>
         <ModalDeleteTask/>
-        <ModalDeleteCollaborator/>
     </>
   )
 }

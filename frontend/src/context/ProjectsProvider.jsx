@@ -15,7 +15,6 @@ const ProjectsProvider = ({children}) => {
     const [task, setTask] = useState({});
     const [modalDeleteTask,setModalDeleteTask] = useState(false)
     const [collaborator, setCollaborator] = useState({})
-    const [modalDeleteCollaborator, setModalDeleteCollaborator] = useState(false)
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -323,11 +322,6 @@ const ProjectsProvider = ({children}) => {
         }
     }
 
-    const handleModalDeleteCollaborator = (collaborator) => {
-        setModalDeleteCollaborator(!modalDeleteCollaborator)
-        setCollaborator(collaborator)
-    }
-
     return(
         <ProjectsContext.Provider
             value={{
@@ -339,7 +333,6 @@ const ProjectsProvider = ({children}) => {
                 modalDeleteTask,
                 task,
                 collaborator,
-                modalDeleteCollaborator,
                 showAlert,
                 submitProject,
                 getProject,
@@ -350,8 +343,7 @@ const ProjectsProvider = ({children}) => {
                 handleModalDeleteTask,
                 deleteTask,
                 submitCollaborator,
-                addCollaborator,
-                handleModalDeleteCollaborator
+                addCollaborator
             }}>{children}
 
         </ProjectsContext.Provider>

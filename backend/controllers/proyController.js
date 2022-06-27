@@ -135,9 +135,7 @@ const addCollaborator  = async (req, res) => {
     
 };
 
-const deleteCollaborator  = async (req, res) => {
-    
-};
+const deleteCollaborator  = async (req, res) => {};
 
 
 export {
