@@ -6,7 +6,7 @@ import Header from '../components/Header';
 
 const ProtectedRoute = () => {
     const{auth,loading} = useAuth();
-    console.log(auth, loading);
+    //console.log(auth, loading);
     if(loading) return 'Loading...'
     return (
     <div>

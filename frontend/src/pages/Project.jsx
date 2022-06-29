@@ -3,8 +3,10 @@ import { useParams, Link } from "react-router-dom"
 import useProjects from "../hooks/useProjects";
 import ModalFormTask from '../components/ModalFormTask'
 import ModalDeleteTask from '../components/ModalDeleteTask'
+import ModalDeleteCollaborator from '../components/ModalDeleteCollaborator';
 import Task from '../components/Task'
 import Alert from '../components/Alert';
+import Collaborator from '../components/Collaborator';
 
 const Project = () => {
   const params=useParams();
@@ -16,6 +18,8 @@ const Project = () => {
   },[])
   
   const {name} = project
+  //console.log(project);
+
   if (loading) return 'loading...'
   const {msg} = alert
   return (  
@@ -51,6 +55,7 @@ const Project = () => {
             {msg && <Alert alert={alert} />}
           </div>
         </div>
+        
         <div className='bg-white shadow mt-10 rounded-lg'>
           {project.tasks?.length ?
             project.tasks?.map(task => (
@@ -61,6 +66,7 @@ const Project = () => {
             )) :
             <p className='text-center my-5 p-10'>There are not tasks in this project</p>}
         </div>
+        
         <div className='flex items-center justify-between mt-5'>
           <p className='font-bold text-xl'>Project members</p>
           <Link
@@ -68,8 +74,21 @@ const Project = () => {
             className='text-gray-400 hover:text-black uppercase font-bold'
           >Add New</Link>
         </div>
+        
+        <div className='bg-white shadow mt-10 rounded-lg'>
+          {project.collaborators?.length ?
+            project.collaborators?.map(collaborator => (
+              <Collaborator
+                key={collaborator._id}
+                collaborator={collaborator}
+                //task={task}
+              />
+            )) :
+            <p className='text-center my-5 p-10'>There are not tasks in this project</p>}
+        </div>
         <ModalFormTask/>
         <ModalDeleteTask/>
+        <ModalDeleteCollaborator/>
     </>
   )
 }
