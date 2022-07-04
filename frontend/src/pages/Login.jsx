@@ -29,7 +29,7 @@ const Login = () => {
                 msg:'Login successfully',
                 error: false
             })
-            console.log(data)
+
             localStorage.setItem('token',data.token);
             setAuth(data)
             navigate('/projects');

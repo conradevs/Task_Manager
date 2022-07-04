@@ -3,7 +3,13 @@ import User from "../models/User.js";
 
 
 const getProjects = async (req, res) => {
-    const projects = await Project.find().where('creator').equals(req.user).select('-Tasks');
+    const projects = await Project.find({
+        '$or' : [
+            {'collaborators' : {$in: req.user}},
+            {'creator' : {$in: req.user}},
+        ]
+    }).select('-Tasks');
+    
     res.json(projects)
 };
 
@@ -135,7 +141,24 @@ const addCollaborator  = async (req, res) => {
     
 };
 
-const deleteCollaborator  = async (req, res) => {};
+const deleteCollaborator  = async (req, res) => {
+    const project = await Project.findById(req.params.id);
+
+    if(!project) {
+        const error = new Error("Project not found");
+        return res.status(404).json({msg: error.message});
+    }
+
+    if (project.creator.toString() !== req.user._id.toString()) {
+        const error = new Error("Invalid Action...");
+        return res.status(404).json({msg: error.message});
+    }
+
+    // Add collaborator to project
+    project.collaborators.pull(req.body.id);
+    await project.save();
+    res.json({msg: 'Collaborator deleted succesfully'})
+};
 
 
 export {

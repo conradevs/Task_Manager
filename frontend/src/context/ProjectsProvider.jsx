@@ -2,6 +2,7 @@ import { useState , useEffect, createContext} from 'react';
 import axiosclient from '../config/axiosclient';
 import  {useNavigate} from 'react-router-dom';
 import NewProject from '../pages/NewProject';
+import Alert from '../components/Alert';
 
 const ProjectsContext = createContext();
 
@@ -32,7 +33,7 @@ const ProjectsProvider = ({children}) => {
                         Authorization: `Bearer ${token}`
                     }
                 }
-                const {data} = await axiosclient('/projects', config)
+                const {data} = await axiosclient.get('/projects', config)
                 setProjects(data)
             } catch (error) {
                 console.log(error);
@@ -285,7 +286,10 @@ const ProjectsProvider = ({children}) => {
         const {data} = await axiosclient.post('/projects/collaborators',{email},config);
         setCollaborator(data)
         setLoading(true)
-        setAlert({})
+        setAlert({
+            msg: data.msg,
+            error: false
+        })
         } catch(error) {
             setAlert({
                 msg: error.response.data.msg,
@@ -315,12 +319,17 @@ const ProjectsProvider = ({children}) => {
                 error: false
             })
             setCollaborator({})
-            setAlert({})
+            setTimeout(() => {
+                setAlert({})
+                navigate(`../projects/${project._id}`);
+            },2000)
+
         } catch(error){
             setAlert({
                 msg: error.response.data.msg,
                 error: true
             })
+            setTimeout(() => {setAlert({})},2000)
         }
     }
 
@@ -330,8 +339,31 @@ const ProjectsProvider = ({children}) => {
 
     }
 
-    const deleteCollaborator = () => {
-        console.log(collaborator)
+    const deleteCollaborator = async () => {
+        try {
+            const token = localStorage.getItem('token')
+            if(!token) return
+
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            const {data} = await axiosclient.post(`/projects/delete-collaborator/${project._id}`,{id: collaborator._id},config);
+            const project_updated = {...project}
+            project_updated.collaborators = project_updated.collaborators.filter(collaboratorState => collaboratorState._id !== collaborator._id)
+            setProject(project_updated);
+            setAlert({
+                msg: data.msg,
+                error: false
+            })
+            setCollaborator({})
+            setModalDeleteCollaborator(false)
+            setTimeout(() => {setAlert({})},2000)
+        } catch (error) {
+            console.log(error.response)
+        }
     }
 
     return(
