@@ -9,7 +9,7 @@ const getProjects = async (req, res) => {
             {'creator' : {$in: req.user}},
         ]
     }).select('-Tasks');
-    
+
     res.json(projects)
 };
 
@@ -36,7 +36,7 @@ const getProject = async (req, res) => {
         const error = new Error("Not Found")
         return res.status(404).json({msg: error.message})
     }
-    if(project.creator.toString() !== req.user._id.toString()){
+    if(project.creator.toString() !== req.user._id.toString() && !project.collaborators.some(collaborator => collaborator._id.toString() === req.user._id.toString())){
         const error = new Error("Access denied")
         return res.status(401).json({msg: error.message});
     }
