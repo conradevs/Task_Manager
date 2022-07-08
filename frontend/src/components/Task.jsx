@@ -1,9 +1,10 @@
 import { dateFormat } from "../helpers/dateFormat"
 import useProjects from '../hooks/useProjects'
+import useAdmin from "../hooks/useAdmin"
 
 const Task = ({task}) => {
-
-    const {handleModalEditTask, handleModalDeleteTask} = useProjects()
+    const admin = useAdmin();
+    const {handleModalEditTask, handleModalDeleteTask, doneTask} = useProjects()
     const {description,name,priority,deadLine,state,_id} = task
     return (
     <div className="border-b p-5 flex justify-between items-center">
@@ -14,22 +15,22 @@ const Task = ({task}) => {
             <p className='mb-2 text-gray-600'>{priority}</p>
         </div>
         <div className='flex gap-2'>
-            <button
-                className='bg-indigo-600 px-4 py-3 text-white uppercase font-bold text-sm rounded-lg'
-                onClick ={() => handleModalEditTask(task)}
-            >Edit</button>
-            {state? ( 
+            {admin && (
                 <button
-                    className='bg-sky-600 px-4 py-3 text-white uppercase font-bold text-sm rounded-lg'
-                >Done</button>
-            ): (<button
-                    className='bg-gray-600 px-4 py-3 text-white uppercase font-bold text-sm rounded-lg'
-                >Incomplete</button>
+                    className='bg-indigo-600 px-4 py-3 text-white uppercase font-bold text-sm rounded-lg'
+                    onClick ={() => handleModalEditTask(task)}
+                >Edit</button>
             )}
             <button
-                className='bg-red-600 px-4 py-3 text-white uppercase font-bold text-sm rounded-lg'
-                onClick={() => handleModalDeleteTask(task)}
-            >Delete</button>
+                className={`${state ? 'bg-sky-600' : 'bg-gray-600'} px-4 py-3 text-white uppercase font-bold text-sm rounded-lg`}
+                onClick ={() => doneTask(_id)}
+            >{state ? 'Done' : 'Incomplete'}</button>  
+            {admin && (
+                <button
+                    className='bg-red-600 px-4 py-3 text-white uppercase font-bold text-sm rounded-lg'
+                    onClick={() => handleModalDeleteTask(task)}
+                >Delete</button>
+            )}
         </div>
     </div>
   )

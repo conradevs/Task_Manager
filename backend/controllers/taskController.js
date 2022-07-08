@@ -87,7 +87,21 @@ const deleteTask = async (req,res) => {
 };
 
 const  changeState = async (req,res) => {
-    
+    const {id} = req.params;
+    const task = await Task.findById(id).populate("project");
+
+    if(!task) {
+        const error = new Error("Not Found")
+        return res.status(404).json({msg: error.message})
+    }
+
+    if(task.project.creator.toString() !== req.user._id.toString() && !task.project.collaborators.some(collaborator => collaborator._id.toString() === req.user._id.toString())){
+        const error = new Error("Access denied")
+        return res.status(401).json({msg: error.message});
+    }
+    task.state = !task.state;
+    await task.save()
+    res.json(task);
 };
 
 export {

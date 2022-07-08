@@ -366,6 +366,34 @@ const ProjectsProvider = ({children}) => {
         }
     }
 
+    const doneTask = async id => {
+        try {
+            const token = localStorage.getItem('token')
+            if(!token) return
+
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            const {data} = await axiosclient.post(`/tasks/state/${id}`,{},config)
+            console.log(data)
+            const updatedProject = {...project}
+            updatedProject.tasks = updatedProject.tasks.map(taskState => 
+                taskState._id === data._id ? data : taskState
+            )
+            console.log(updatedProject.tasks)
+            setProject(updatedProject);
+            setTask({});
+            setAlert({});
+        } catch (error) {
+            console.log(error.response)            
+        }
+    }
+
+
+
     return(
         <ProjectsContext.Provider
             value={{
@@ -390,7 +418,8 @@ const ProjectsProvider = ({children}) => {
                 submitCollaborator,
                 addCollaborator,
                 handleModalDeleteCollaborator,
-                deleteCollaborator
+                deleteCollaborator,
+                doneTask
             }}>{children}
 
         </ProjectsContext.Provider>
