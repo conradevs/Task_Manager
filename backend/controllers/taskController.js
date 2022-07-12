@@ -100,8 +100,10 @@ const  changeState = async (req,res) => {
         return res.status(401).json({msg: error.message});
     }
     task.state = !task.state;
-    await task.save()
-    res.json(task);
+    task.completedBy = req.user._id;
+    await task.save();
+    const storedTask = await Task.findById(id).populate("project").populate("completedBy");
+    res.json(storedTask);
 };
 
 export {

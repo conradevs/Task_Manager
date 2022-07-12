@@ -132,10 +132,12 @@ const ProjectsProvider = ({children}) => {
             const {data} = await axiosclient(`/projects/${id}`,config)
             setProject(data)
         } catch (error) {
+            navigate('/projects')
             setAlert({
                 msg: error.response.data.msg,
                 error: true
             })
+            setTimeout(() => {setAlert({})},2000)
 
         } finally {
             setLoading(false)

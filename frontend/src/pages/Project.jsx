@@ -29,8 +29,7 @@ const Project = () => {
   const admin = useAdmin();
   console.log(admin)
   
-  return (  
-    msg && alert.error ? <Alert alert={alert}/> : (
+  return (
       <>
         <div className='flex justify-between'>
 
@@ -60,11 +59,7 @@ const Project = () => {
           New task</button>
         )}
           <p className='font-bold text-xl mt-10'>Project Tasks</p>
-          <div className='flex justify-center'>
-            <div className='w-full md:w-1/3 lg:w-1/4'>
-              {msg && <Alert alert={alert} />}
-            </div>
-          </div>
+          
 
           <div className='bg-white shadow mt-10 rounded-lg'>
             {project.tasks?.length ?
@@ -103,7 +98,7 @@ const Project = () => {
           <ModalDeleteTask/>
           <ModalDeleteCollaborator/>
       </>
-    ) 
+    
   )
 }
 
