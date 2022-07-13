@@ -24,8 +24,6 @@ const Project = () => {
   if (loading) return 'loading...'
   const {msg} = alert
 
-  console.log(project);
-
   const admin = useAdmin();
   console.log(admin)
   

@@ -15,7 +15,7 @@ const Task = ({task}) => {
             <p className='mb-2 text-gray-600'>{priority}</p>
             {state && <p className = 'text-xs bg-green-600 uppercase p-1 rounded-lg text-white'>Completed by: {task.completedBy.name}</p>}
         </div>
-        <div className='flex gap-2'>
+        <div className='flex flex-col lg:flex-row gap-2'>
             {admin && (
                 <button
                     className='bg-indigo-600 px-4 py-3 text-white uppercase font-bold text-sm rounded-lg'
