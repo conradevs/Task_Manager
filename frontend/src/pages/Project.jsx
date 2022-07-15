@@ -8,6 +8,9 @@ import ModalDeleteCollaborator from '../components/ModalDeleteCollaborator';
 import Task from '../components/Task'
 import Alert from '../components/Alert';
 import Collaborator from '../components/Collaborator';
+import io from 'socket.io-client'
+
+let socket;
 
 const Project = () => {
   const params=useParams();
@@ -17,7 +20,9 @@ const Project = () => {
   useEffect(() => {
       getProject(params.id)
   },[])
-  
+  useEffect(() => {
+    socket = io(import.meta.env.VITE_BACKEND_URL)
+  },[])  
   const {name} = project
   //console.log(project);
 

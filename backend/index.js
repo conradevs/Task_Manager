@@ -54,7 +54,5 @@ io.on('connection', (socket) => {
     console.log('Connected to socket.io');
 
     // Define socket io events
-    socket.on('test',(name) => {
-        console.log('test from Socket io', name)
-    })
+    
 })
