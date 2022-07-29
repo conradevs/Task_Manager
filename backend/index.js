@@ -54,5 +54,10 @@ io.on('connection', (socket) => {
     console.log('Connected to socket.io');
 
     // Define socket io events
-    
-})
+    socket.on('open project', (project) => {
+        socket.join(project);
+        socket.on('new task', (task) => {
+            console.log(task)
+        });
+    });
+});
