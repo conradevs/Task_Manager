@@ -232,10 +232,6 @@ const ProjectsProvider = ({children}) => {
 
             const {data} = await axiosclient.post('/tasks',task,config)
 
-            // Add task to state
-            const updatedProject = {...project}
-            updatedProject.tasks = [...project.tasks, data]
-            setProject(updatedProject)
             setAlert({})
             setModalFormTask(false)            
             
@@ -409,6 +405,13 @@ const ProjectsProvider = ({children}) => {
         setFinder(!finder);
     }
 
+    // Socket io
+    const submitProjectTasks = (task) => {
+        // Add task to state
+        const updatedProject = {...project}
+        updatedProject.tasks = [...updatedProject.tasks, task]
+        setProject(updatedProject)
+    }
     return(
         <ProjectsContext.Provider
             value={{
@@ -436,7 +439,8 @@ const ProjectsProvider = ({children}) => {
                 handleModalDeleteCollaborator,
                 deleteCollaborator,
                 doneTask,
-                handleFinder
+                handleFinder,
+                submitProjectTasks
             }}>{children}
 
         </ProjectsContext.Provider>

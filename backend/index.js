@@ -56,8 +56,9 @@ io.on('connection', (socket) => {
     // Define socket io events
     socket.on('open project', (project) => {
         socket.join(project);
-        socket.on('new task', (task) => {
-            console.log(task)
-        });
+    });
+    socket.on('new task', (task) => {
+        const project = task.project
+        socket.on(project).emit('added task', task)
     });
 });
