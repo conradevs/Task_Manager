@@ -15,14 +15,23 @@ let socket;
 const Project = () => {
   const params=useParams();
   
-  const {project,getProject, loading,handleModalTask,alert} = useProjects();
+  const {project,getProject, loading,handleModalTask,alert,submitProjectTasks} = useProjects();
 
   useEffect(() => {
       getProject(params.id)
   },[])
   useEffect(() => {
     socket = io(import.meta.env.VITE_BACKEND_URL)
+    socket.emit('open project', params.id)
   },[])  
+  useEffect(() => {
+    socket.on('added task', newTask => {
+      if(newTask.project === project._id) {
+        submitProjectTasks(newTask)
+      }
+    })
+  })
+
   const {name} = project
   //console.log(project);
 
