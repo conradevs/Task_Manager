@@ -1,9 +1,8 @@
 import { useState , useEffect, createContext} from 'react';
 import axiosclient from '../config/axiosclient';
 import  {useNavigate} from 'react-router-dom';
-import NewProject from '../pages/NewProject';
-import Alert from '../components/Alert';
-import io from 'socket.io-client'
+import useAuth from '../hooks/useAuth';
+import io from 'socket.io-client';
 
 let socket;
 
@@ -23,7 +22,7 @@ const ProjectsProvider = ({children}) => {
     const [ finder, setFinder] = useState(false);
 
     const navigate = useNavigate();
-
+    const auth = useAuth()
     useEffect(() => {
         const getProjects = async () => {
             try {
@@ -43,7 +42,7 @@ const ProjectsProvider = ({children}) => {
             }
         }
         getProjects();
-    },[])
+    },[auth])
 
     useEffect(() => {
         socket = io(import.meta.env.VITE_BACKEND_URL)
@@ -209,11 +208,12 @@ const ProjectsProvider = ({children}) => {
             }
 
             const {data} = await axiosclient.put(`/tasks/${task.id}`,task,config)
-            const updatedProject = {...project}
-            updatedProject.tasks = updatedProject.tasks.map(taskState => taskState._id === data._id? data : taskState)
-            setProject(updatedProject)
+            
             setAlert({})
             setModalFormTask(false);
+
+            // socket IO
+            socket.emit('update task', data)
         } catch (error) {
             console.log(error)
         }
@@ -275,9 +275,36 @@ const ProjectsProvider = ({children}) => {
             const {proj_updated} = await axiosclient.put(`/projects/${project._id}`,updatedProject,config);
             setModalDeleteTask(false);
             setTask({})
-            setTimeout(() => {setAlert({})},1000)      
+    
+            
+            // SOCKET
+            socket.emit('delete task',task)
+            setTimeout(() => {setAlert({})},1000)  
         } catch (error) {
             console.log(error)
+        }
+    }
+
+    const doneTask = async id => {
+        try {
+            const token = localStorage.getItem('token')
+            if(!token) return
+
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            const {data} = await axiosclient.post(`/tasks/state/${id}`,{},config)
+ 
+            setTask({});
+            setAlert({});
+
+            // socket
+            socket.emit('change state', data)
+        } catch (error) {
+            console.log(error.response)            
         }
     }
 
@@ -375,31 +402,7 @@ const ProjectsProvider = ({children}) => {
         }
     }
 
-    const doneTask = async id => {
-        try {
-            const token = localStorage.getItem('token')
-            if(!token) return
 
-            const config = {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
-                }
-            }
-            const {data} = await axiosclient.post(`/tasks/state/${id}`,{},config)
-            console.log(data)
-            const updatedProject = {...project}
-            updatedProject.tasks = updatedProject.tasks.map(taskState => 
-                taskState._id === data._id ? data : taskState
-            )
-            console.log(updatedProject.tasks)
-            setProject(updatedProject);
-            setTask({});
-            setAlert({});
-        } catch (error) {
-            console.log(error.response)            
-        }
-    }
 
     const handleFinder = () => {
         setFinder(!finder);
@@ -412,6 +415,34 @@ const ProjectsProvider = ({children}) => {
         updatedProject.tasks = [...updatedProject.tasks, task]
         setProject(updatedProject)
     }
+
+    const deleteProjectTask = task => {
+        const updatedProject = {...project}
+        updatedProject.tasks = updatedProject.tasks.filter(taskState => taskState._id !== task._id)
+        setProject(updatedProject)
+    }
+
+    const updateProjectTask = task => {
+        const updatedProject = {...project}
+        updatedProject.tasks = updatedProject.tasks.map(taskState => taskState._id === task._id? task : taskState)
+        setProject(updatedProject)
+    }
+
+    const changeTaskState = task => {
+        const updatedProject = {...project}
+            updatedProject.tasks = updatedProject.tasks.map(taskState => 
+                taskState._id === task._id ? task : taskState
+            )
+            console.log(updatedProject.tasks)
+            setProject(updatedProject);
+    }
+
+    const closeSession = () => {
+        setProjects([])
+        setProject({})
+        setAlert({})
+    }
+
     return(
         <ProjectsContext.Provider
             value={{
@@ -440,7 +471,11 @@ const ProjectsProvider = ({children}) => {
                 deleteCollaborator,
                 doneTask,
                 handleFinder,
-                submitProjectTasks
+                submitProjectTasks,
+                deleteProjectTask,
+                updateProjectTask,
+                changeTaskState,
+                closeSession
             }}>{children}
 
         </ProjectsContext.Provider>

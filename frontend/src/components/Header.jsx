@@ -1,10 +1,18 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import useProjects from '../hooks/useProjects'
+import useAuth from '../hooks/useAuth'
 import Finder from './Finder'
 
 const Header = () => {
-    const {handleFinder} = useProjects();
+    const {handleFinder,closeSession} = useProjects();
+    const {closeSessionAuth} = useAuth();
+
+    const handleCloseSession = () => {
+        closeSessionAuth();
+        closeSession()
+        localStorage.removeItem('token')
+    }
     return (
     <header className='px-4 py-5 bg-white border-b'>
         <div className="md:flex md: justify-between">
@@ -29,6 +37,7 @@ const Header = () => {
                     <button
                         type="button"
                         className="text-white text-sm bg-sky-600 p-3 rounded-md uppercase font-bold"
+                        onClick={handleCloseSession}
                     >LogOut</button>
                     <Finder/>
                 </div>

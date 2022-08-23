@@ -51,14 +51,29 @@ const io = new Server(server, {
 });
 
 io.on('connection', (socket) => {
-    console.log('Connected to socket.io');
 
     // Define socket io events
     socket.on('open project', (project) => {
+        //console.log('From project',project);
         socket.join(project);
     });
     socket.on('new task', (task) => {
-        const project = task.project
-        socket.on(project).emit('added task', task)
+        const project = task.project;
+        //console.log(project)
+        socket.to(project).emit('added task', task)
     });
+    socket.on('delete task', task => {
+        //console.log(task)
+        const project = task.project;
+        //console.log(project)
+        socket.to(project).emit('deleted task', task)
+    });
+    socket.on('update task', (task) => {
+        const project = task.project._id;
+        socket.to(project).emit('updated task', task);
+    }); 
+    socket.on('change state', (task) => {
+        const project = task.project._id
+        socket.to(project).emit('new state', task);
+    })
 });

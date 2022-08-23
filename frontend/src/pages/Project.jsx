@@ -15,7 +15,9 @@ let socket;
 const Project = () => {
   const params=useParams();
   
-  const {project,getProject, loading,handleModalTask,alert,submitProjectTasks} = useProjects();
+  const {project,getProject, loading,handleModalTask,alert,submitProjectTasks,deleteProjectTask,updateProjectTask,changeTaskState} = useProjects();
+
+  const admin = useAdmin();
 
   useEffect(() => {
       getProject(params.id)
@@ -25,9 +27,24 @@ const Project = () => {
     socket.emit('open project', params.id)
   },[])  
   useEffect(() => {
-    socket.on('added task', newTask => {
+    socket.on('added task', (newTask) => {
       if(newTask.project === project._id) {
         submitProjectTasks(newTask)
+      }
+    })
+    socket.on('deleted task', (deletedTask) => {
+      if(deletedTask.project === project._id) {
+        deleteProjectTask(deletedTask)
+      }
+    })
+    socket.on('updated task', updatedTask => {
+      if(updatedTask.project._id === project._id) {
+        updateProjectTask(updatedTask)
+      }
+    })
+    socket.on('new state', newState => {
+      if(newState.project._id === project._id) {
+        changeTaskState(newState)
       }
     })
   })
@@ -38,8 +55,6 @@ const Project = () => {
   if (loading) return 'loading...'
   const {msg} = alert
 
-  const admin = useAdmin();
-  console.log(admin)
   
   return (
       <>
