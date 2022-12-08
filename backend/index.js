@@ -29,7 +29,10 @@ const corsOptions = {
 };
 
 
-app.use(cors(corsOptions));
+app.use(cors({
+    origin: process.env.FRONTEND_URL
+}));
+//app.use(cors(corsOptions));
 // Routing
 
 app.use('/api/users', userRoutes);
