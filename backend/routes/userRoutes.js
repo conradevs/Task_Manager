@@ -8,7 +8,7 @@ import {registration,
     confirmToken,
     newPassword,
     profile
-} from "../controllers/UserController.js";
+} from "../controllers/userController.js";
 
 
 import checkAuth from '../middleware/checkAuth.js'
