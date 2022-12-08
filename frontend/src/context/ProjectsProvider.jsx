@@ -433,7 +433,7 @@ const ProjectsProvider = ({children}) => {
             updatedProject.tasks = updatedProject.tasks.map(taskState => 
                 taskState._id === task._id ? task : taskState
             )
-            console.log(updatedProject.tasks)
+            //console.log(updatedProject.tasks)
             setProject(updatedProject);
     }
 
