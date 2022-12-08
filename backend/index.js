@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import conectarDB from "./config/db.js";
+import conectDB from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js";
 import proyRoutes from "./routes/proyRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json())
 
 dotenv.config();
-conectarDB();
+conectDB();
 
 // Config cors
 const whitelist = [process.env.FRONTEND_URL];
@@ -25,6 +25,8 @@ const corsOptions = {
         }
     },
 };
+
+
 app.use(cors(corsOptions));
 // Routing
 
