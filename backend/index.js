@@ -21,13 +21,15 @@ const corsOptions = {
             callback(null, true);
         } else{
             // Not autorization
-            callback(new Error("CORS Error"));
+            console.log('request from '+ origin)
+            console.log('request from not allowed domain')
+            callback(new Error("Some CORS Error again"));
         }
     },
 };
 
 
-app.use(cors());//corsOptions));
+app.use(cors(corsOptions));
 // Routing
 
 app.use('/api/users', userRoutes);
