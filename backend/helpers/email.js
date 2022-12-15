@@ -14,7 +14,7 @@ export const emailRegister = async (data) => {
     
     // Email info
     const info = await transport.sendMail({
-        from: '"TaskManager - Project Administrator" <accounts@taskmanager.com>',
+        from: '"TaskManager Team" <admin@conradevs.com>',
         to: email,
         subject: "TaskManager - Confirm your Account",
         text: "Confirm your new Account by clicking the following link",
@@ -39,7 +39,7 @@ export const emailForgotPassword = async (data) => {
     
     // Email info
     const info = await transport.sendMail({
-        from: '"TaskManager - Project Administrator" <accounts@taskmanager.com>',
+        from: '"TaskManager Team" <admin@conradevs.com>',
         to: email,
         subject: "TaskManager - New password confirmation",
         text: "Reset your password your password",
