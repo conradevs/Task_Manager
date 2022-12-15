@@ -16,12 +16,14 @@ conectarDB();
 const whitelist = [process.env.FRONTEND_URL];
 const corsOptions = {
     origin: function(origin,callback) {
+        console.log(origin)
+        console.log(whitelist)
         if(whitelist.includes(origin)) {
             // Can consult API
             callback(null, true);
         } else{
             // Not autorization
-            callback(new Error("CORS Error"));
+            callback(console.log(origin))//new Error("CORS Error"));
         }
     },
 };
